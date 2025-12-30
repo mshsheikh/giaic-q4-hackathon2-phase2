@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add .specify specs history)",
+      "Bash(git commit -m \"Phase 2 Complete: Full Spec Foundation & Cloud-Native Reusable Agent Skills\n\n- Phase II-A: Full-stack web app specs completed\n  • Constitution updated \\(full-stack, spec-driven, JWT auth, multi-user data isolation\\)\n  • Project overview, architecture, feature, API, database, UI specs created and validated\n  • Prompt History Record created\n\n- Phase II-B: Cloud-native & reusable agent skills\n  • Constitution extended with cloud-native principles\n  • Cloud blueprint, environment contract, CI/CD spec created\n  • Three reusable agent skills defined \\(deployment planner, env validator, API contract verifier\\)\n  • Prompt History Record created\n\n- All specs internally consistent, platform-agnostic, zero-secrets compliant, and ready for Phase III implementation.\")",
+      "Bash(git config --global user.email \"claude@example.com\")",
+      "Bash(git config --global user.name \"Claude\")"
+    ]
+  }
+}
