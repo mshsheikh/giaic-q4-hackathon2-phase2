@@ -12,7 +12,12 @@
       "Bash(PYTHONPATH=. python -c \"from main import app; print\\(''✅ Import successful - main.py can be imported correctly''\\)\")",
       "Bash(source venv/bin/activate)",
       "Bash(python -c \"from main import app; print\\(''✅ Import successful - main.py can be imported correctly''\\)\")",
-      "Bash(PYTHONPATH=. backend/venv/bin/python -c \"import sys; sys.path.insert\\(0, ''.''\\); from backend.main import app; print\\(''✅ Import successful - main.py can be imported from repo root with PYTHONPATH set''\\)\")"
+      "Bash(PYTHONPATH=. backend/venv/bin/python -c \"import sys; sys.path.insert\\(0, ''.''\\); from backend.main import app; print\\(''✅ Import successful - main.py can be imported from repo root with PYTHONPATH set''\\)\")",
+      "Bash(export PYTHONPATH=/app:$PYTHONPATH)",
+      "Bash(uvicorn main:app --host 0.0.0.0 --port $PORT)",
+      "Bash(PORT=8000 uvicorn main:app --host 0.0.0.0 --port $PORT)",
+      "Bash(export:*)",
+      "Bash(PYTHONPATH=. backend/venv/bin/python -c \"from backend.main import app; print\\(''Success: backend.main can be imported from repo root''\\)\")"
     ]
   }
 }
