@@ -2,7 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { Task, TaskCreate, TaskUpdate } from '../types/task';
-import { apiClient } from '../lib/api-client';
+import { api } from '../lib/api';
+import { isAuthenticated } from '../lib/auth';
+import { useRouter } from 'next/navigation';
 import TaskList from '../components/TaskList';
 import TaskForm from '../components/TaskForm';
 
@@ -14,73 +16,131 @@ const HomePage = () => {
   const [filter, setFilter] = useState<'all' | 'pending' | 'completed'>('all');
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const router = useRouter();
 
-  // Load tasks from API
+  // Check authentication on component mount
   useEffect(() => {
-    loadTasks();
+    if (!isAuthenticated()) {
+      router.push('/login');
+    } else {
+      loadTasks();
+    }
+  }, [router]);
+
+  // Reload tasks when filter or page changes
+  useEffect(() => {
+    if (isAuthenticated()) {
+      loadTasks();
+    }
   }, [filter, currentPage]);
 
   const loadTasks = async () => {
+    if (!isAuthenticated()) {
+      router.push('/login');
+      return;
+    }
+
     try {
       setLoading(true);
-      const response = await apiClient.getTasks(
-        filter === 'all' ? undefined : filter,
-        currentPage,
-        10
-      );
+
+      const response = await api.getTasks(currentPage, 10, filter);
       setTasks(response.tasks);
       setTotalPages(response.pagination.pages);
     } catch (error) {
       console.error('Error loading tasks:', error);
-      alert('Failed to load tasks');
+      if (error instanceof Error && error.message.includes('401')) {
+        router.push('/login');
+      } else {
+        alert('Failed to load tasks');
+      }
     } finally {
       setLoading(false);
     }
   };
 
   const handleCreateTask = async (taskData: TaskCreate) => {
+    if (!isAuthenticated()) {
+      router.push('/login');
+      return;
+    }
+
     try {
-      const newTask = await apiClient.createTask(taskData);
+      const newTask = await api.createTask(taskData);
       setTasks([newTask, ...tasks]);
       setShowForm(false);
     } catch (error) {
       console.error('Error creating task:', error);
-      alert('Failed to create task');
+      if (error instanceof Error && error.message.includes('401')) {
+        router.push('/login');
+      } else {
+        alert('Failed to create task');
+      }
     }
   };
 
   const handleUpdateTask = async (taskId: string, taskData: TaskUpdate) => {
+    if (!isAuthenticated()) {
+      router.push('/login');
+      return;
+    }
+
     try {
-      const updatedTask = await apiClient.updateTask(taskId, taskData);
+      const updatedTask = await api.updateTask(taskId, taskData);
       setTasks(tasks.map(task => task.id === taskId ? updatedTask : task));
       setEditingTask(null);
     } catch (error) {
       console.error('Error updating task:', error);
-      alert('Failed to update task');
+      if (error instanceof Error && error.message.includes('401')) {
+        router.push('/login');
+      } else {
+        alert('Failed to update task');
+      }
     }
   };
 
   const handleToggleTask = async (taskId: string, status: 'pending' | 'completed') => {
+    if (!isAuthenticated()) {
+      router.push('/login');
+      return;
+    }
+
     try {
-      const updatedTask = await apiClient.updateTaskStatus(taskId, { status });
-      setTasks(tasks.map(task => task.id === taskId ? updatedTask : task));
+      // For the canonical API, we'll use updateTask to change the status
+      const taskToUpdate = tasks.find(task => task.id === taskId);
+      if (taskToUpdate) {
+        const updatedTask = await api.updateTask(taskId, { ...taskToUpdate, status });
+        setTasks(tasks.map(task => task.id === taskId ? updatedTask : task));
+      }
     } catch (error) {
       console.error('Error updating task status:', error);
-      alert('Failed to update task status');
+      if (error instanceof Error && error.message.includes('401')) {
+        router.push('/login');
+      } else {
+        alert('Failed to update task status');
+      }
     }
   };
 
   const handleDeleteTask = async (taskId: string) => {
+    if (!isAuthenticated()) {
+      router.push('/login');
+      return;
+    }
+
     if (!confirm('Are you sure you want to delete this task?')) {
       return;
     }
 
     try {
-      await apiClient.deleteTask(taskId);
+      await api.deleteTask(taskId);
       setTasks(tasks.filter(task => task.id !== taskId));
     } catch (error) {
       console.error('Error deleting task:', error);
-      alert('Failed to delete task');
+      if (error instanceof Error && error.message.includes('401')) {
+        router.push('/login');
+      } else {
+        alert('Failed to delete task');
+      }
     }
   };
 

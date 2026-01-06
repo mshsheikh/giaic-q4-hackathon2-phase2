@@ -35,7 +35,7 @@ class TaskService:
             tasks = result.scalars().all()
 
             # Convert to public model
-            return [TaskPublic.from_orm(task) for task in tasks]
+            return [TaskPublic.model_validate(task) for task in tasks]
 
     @staticmethod
     async def get_task_by_id(task_id: str, user_id: str) -> Optional[TaskPublic]:
@@ -45,7 +45,7 @@ class TaskService:
             task = result.scalar_one_or_none()
 
             if task:
-                return TaskPublic.from_orm(task)
+                return TaskPublic.model_validate(task)
             return None  # Will be handled by the API layer with proper error
 
     @staticmethod
@@ -61,7 +61,7 @@ class TaskService:
             await session.commit()
             await session.refresh(task)
 
-            return TaskPublic.from_orm(task)
+            return TaskPublic.model_validate(task)
 
     @staticmethod
     async def update_task(task_id: str, task_update: TaskUpdate, user_id: str) -> Optional[TaskPublic]:
@@ -86,7 +86,7 @@ class TaskService:
             await session.commit()
             await session.refresh(task)
 
-            return TaskPublic.from_orm(task)
+            return TaskPublic.model_validate(task)
 
     @staticmethod
     async def update_task_status(task_id: str, task_update_status: TaskUpdateStatus, user_id: str) -> Optional[TaskPublic]:
@@ -108,7 +108,7 @@ class TaskService:
             await session.commit()
             await session.refresh(task)
 
-            return TaskPublic.from_orm(task)
+            return TaskPublic.model_validate(task)
 
     @staticmethod
     async def delete_task(task_id: str, user_id: str) -> bool:

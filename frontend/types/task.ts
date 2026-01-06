@@ -1,5 +1,5 @@
 export interface Task {
-  id: string;
+  id: string; // UUID string
   title: string;
   description?: string;
   status: 'pending' | 'completed';
