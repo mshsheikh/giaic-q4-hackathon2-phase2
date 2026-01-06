@@ -8,7 +8,11 @@
       "Bash(chmod +x backend/run.sh)",
       "Bash(chmod +x frontend/run.sh:*)",
       "Bash(chmod +x run.sh)",
-      "Bash(PYTHONPATH=. backend/venv/bin/python -c \"\nimport sys\nimport os\nsys.path.insert\\(0, os.path.join\\(os.getcwd\\(\\), ''.''\\)\\)\n\nimport asyncio\nfrom backend.db.init_db import init_db_and_tables\n\nasync def main\\(\\):\n    print\\(''Verifying database tables exist...''\\)\n    await init_db_and_tables\\(\\)\n    print\\(''Database tables verified successfully!''\\)\n\nasyncio.run\\(main\\(\\)\\)\n\")"
+      "Bash(PYTHONPATH=. backend/venv/bin/python -c \"\nimport sys\nimport os\nsys.path.insert\\(0, os.path.join\\(os.getcwd\\(\\), ''.''\\)\\)\n\nimport asyncio\nfrom backend.db.init_db import init_db_and_tables\n\nasync def main\\(\\):\n    print\\(''Verifying database tables exist...''\\)\n    await init_db_and_tables\\(\\)\n    print\\(''Database tables verified successfully!''\\)\n\nasyncio.run\\(main\\(\\)\\)\n\")",
+      "Bash(PYTHONPATH=. python -c \"from main import app; print\\(''✅ Import successful - main.py can be imported correctly''\\)\")",
+      "Bash(source venv/bin/activate)",
+      "Bash(python -c \"from main import app; print\\(''✅ Import successful - main.py can be imported correctly''\\)\")",
+      "Bash(PYTHONPATH=. backend/venv/bin/python -c \"import sys; sys.path.insert\\(0, ''.''\\); from backend.main import app; print\\(''✅ Import successful - main.py can be imported from repo root with PYTHONPATH set''\\)\")"
     ]
   }
 }
