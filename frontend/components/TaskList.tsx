@@ -3,11 +3,14 @@
 import React from 'react';
 import { Task } from '../types/task';
 import TaskCard from './TaskCard';
+import TaskSkeleton from './TaskSkeleton';
+import EmptyState from './EmptyState';
 
 interface TaskListProps {
   tasks: Task[];
   loading?: boolean;
   emptyMessage?: string;
+  filter?: 'all' | 'pending' | 'completed';
   onTaskToggle: (taskId: string, status: 'pending' | 'completed') => void;
   onTaskEdit: (taskId: string) => void;
   onTaskDelete: (taskId: string) => void;
@@ -17,6 +20,7 @@ const TaskList: React.FC<TaskListProps> = ({
   tasks,
   loading = false,
   emptyMessage = "No tasks found",
+  filter,
   onTaskToggle,
   onTaskEdit,
   onTaskDelete
@@ -24,26 +28,35 @@ const TaskList: React.FC<TaskListProps> = ({
   if (loading) {
     return (
       <div className="space-y-3">
-        {[...Array(3)].map((_, index) => (
-          <div key={index} className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 mb-3 animate-pulse">
-            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-2"></div>
-            <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
-          </div>
+        {[...Array(5)].map((_, index) => (
+          <TaskSkeleton key={index} />
         ))}
       </div>
     );
   }
 
   if (tasks.length === 0) {
+    let emptyTitle = "No tasks found";
+    let emptySubtitle = "Get started by creating your first task";
+
+    if (filter === 'pending') {
+      emptyTitle = "No pending tasks";
+      emptySubtitle = "All tasks are completed! Great job!";
+    } else if (filter === 'completed') {
+      emptyTitle = "No completed tasks";
+      emptySubtitle = "Start completing tasks to see them here";
+    }
+
     return (
-      <div className="text-center py-8">
-        <p className="text-gray-500 dark:text-gray-400">{emptyMessage}</p>
-      </div>
+      <EmptyState
+        title={emptyTitle}
+        subtitle={emptySubtitle}
+      />
     );
   }
 
   return (
-    <div>
+    <div className="space-y-3">
       {tasks.map((task) => (
         <TaskCard
           key={task.id}

@@ -64,11 +64,29 @@ const HomePage = () => {
       return;
     }
 
+    // Optimistic update: add task immediately to UI
+    const tempId = `temp-${Date.now()}`;
+    const newTask: Task = {
+      id: tempId,
+      title: taskData.title,
+      description: taskData.description,
+      status: 'pending',
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      user_id: '',
+      due_date: taskData.due_date
+    };
+
+    setTasks(prev => [newTask, ...prev]);
+    setShowForm(false);
+
     try {
-      const newTask = await api.createTask(taskData);
-      setTasks([newTask, ...tasks]);
-      setShowForm(false);
+      const createdTask = await api.createTask(taskData);
+      // Replace the temporary task with the actual created task
+      setTasks(prev => prev.map(task => task.id === tempId ? createdTask : task));
     } catch (error) {
+      // If the API call fails, remove the temporary task
+      setTasks(prev => prev.filter(task => task.id !== tempId));
       console.error('Error creating task:', error);
       if (error instanceof Error && error.message.includes('401')) {
         router.push('/login');
@@ -104,14 +122,25 @@ const HomePage = () => {
       return;
     }
 
+    // Optimistic update: update the task status immediately in the UI
+    setTasks(prev => prev.map(task =>
+      task.id === taskId ? { ...task, status, updated_at: new Date().toISOString() } : task
+    ));
+
     try {
       // For the canonical API, we'll use updateTask to change the status
       const taskToUpdate = tasks.find(task => task.id === taskId);
       if (taskToUpdate) {
         const updatedTask = await api.updateTask(taskId, { ...taskToUpdate, status });
-        setTasks(tasks.map(task => task.id === taskId ? updatedTask : task));
+        // Update with the server response
+        setTasks(prev => prev.map(task => task.id === taskId ? updatedTask : task));
       }
     } catch (error) {
+      // If the API call fails, revert the optimistic update
+      setTasks(prev => prev.map(task =>
+        task.id === taskId ? { ...task, status: status === 'completed' ? 'pending' : 'completed', updated_at: new Date().toISOString() } : task
+      ));
+
       console.error('Error updating task status:', error);
       if (error instanceof Error && error.message.includes('401')) {
         router.push('/login');
@@ -131,10 +160,19 @@ const HomePage = () => {
       return;
     }
 
+    // Optimistic update: remove the task immediately from the UI
+    const taskToDelete = tasks.find(task => task.id === taskId);
+    if (!taskToDelete) return;
+
+    setTasks(prev => prev.filter(task => task.id !== taskId));
+
     try {
       await api.deleteTask(taskId);
-      setTasks(tasks.filter(task => task.id !== taskId));
+      // Task deletion successful, UI is already updated
     } catch (error) {
+      // If the API call fails, restore the deleted task
+      setTasks(prev => [...prev, taskToDelete]);
+
       console.error('Error deleting task:', error);
       if (error instanceof Error && error.message.includes('401')) {
         router.push('/login');
@@ -165,12 +203,32 @@ const HomePage = () => {
     setEditingTask(null);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('access_token');
+    router.push('/login');
+  };
+
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Todo App</h1>
-        <p className="text-gray-600 dark:text-gray-400">Manage your tasks efficiently</p>
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
+      {/* Header */}
+      <header className="bg-gray-800/50 backdrop-blur-lg border-b border-cyan-500/30">
+        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+          <div>
+            <h1 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
+              Todo App
+            </h1>
+            <p className="text-gray-400 text-sm">Manage your tasks efficiently</p>
+          </div>
+          <button
+            onClick={handleLogout}
+            className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md transition-colors duration-200"
+          >
+            Logout
+          </button>
+        </div>
+      </header>
+
+      <main className="container mx-auto px-4 py-8">
 
       <div className="mb-6 flex justify-between items-center">
         <div className="flex space-x-2">
@@ -229,6 +287,7 @@ const HomePage = () => {
       <TaskList
         tasks={tasks}
         loading={loading}
+        filter={filter}
         onTaskToggle={handleToggleTask}
         onTaskEdit={handleEditTask}
         onTaskDelete={handleDeleteTask}
@@ -254,6 +313,7 @@ const HomePage = () => {
           </div>
         </div>
       )}
+    </main>
     </div>
   );
 };
