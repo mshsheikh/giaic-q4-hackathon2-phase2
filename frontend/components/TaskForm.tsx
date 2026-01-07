@@ -25,10 +25,20 @@ const TaskForm: React.FC<TaskFormProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Format due date to ISO string if provided
+    let formattedDueDate: string | undefined = undefined;
+    if (dueDate) {
+      // Convert date string to ISO format (date input returns YYYY-MM-DD)
+      const dateObj = new Date(dueDate);
+      // Set to end of day in UTC to avoid timezone issues
+      dateObj.setUTCHours(23, 59, 59, 999);
+      formattedDueDate = dateObj.toISOString();
+    }
+
     const taskData: TaskCreate | TaskUpdate = {
       title: title.trim(),
       description: description.trim() || undefined,
-      due_date: dueDate || undefined,
+      due_date: formattedDueDate || undefined,
     };
 
     // Add validation

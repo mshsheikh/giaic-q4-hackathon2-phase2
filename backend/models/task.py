@@ -24,8 +24,11 @@ class Task(TaskBase, table=True):
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
 
-class TaskCreate(TaskBase):
-    pass
+class TaskCreate(SQLModel):
+    title: str = Field(min_length=1, max_length=100)
+    description: Optional[str] = Field(default=None, max_length=1000)
+    status: TaskStatus = Field(default=TaskStatus.PENDING)
+    due_date: Optional[datetime] = Field(default=None)
 
 
 class TaskUpdate(SQLModel):

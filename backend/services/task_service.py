@@ -56,10 +56,10 @@ class TaskService:
                 print(f"DEBUG: Attempting to create task for user_id: {user_id}")
 
                 # Create task with user_id for ownership
-                task = Task(
-                    **task_create.dict(),
-                    user_id=user_id
-                )
+                task_data = task_create.dict()
+                task_data['user_id'] = user_id  # Add user_id that wasn't in the original request
+
+                task = Task(**task_data)
 
                 session.add(task)
                 await session.commit()
