@@ -64,7 +64,7 @@ class TaskService:
                     dt = task_data['due_date']
                     if dt.tzinfo is not None:
                         # Convert to UTC and remove tzinfo
-                        task_data['due_date'] = dt.astimezone(datetime.timezone.utc).replace(tzinfo=None)
+                        task_data['due_date'] = dt.astimezone(timezone.utc).replace(tzinfo=None)
 
                 task = Task(**task_data)
 
@@ -103,7 +103,7 @@ class TaskService:
                 dt = update_data['due_date']
                 if dt.tzinfo is not None:
                     # Convert to UTC and remove tzinfo
-                    update_data['due_date'] = dt.astimezone(datetime.timezone.utc).replace(tzinfo=None)
+                    update_data['due_date'] = dt.astimezone(timezone.utc).replace(tzinfo=None)
 
             for field, value in update_data.items():
                 setattr(task, field, value)
