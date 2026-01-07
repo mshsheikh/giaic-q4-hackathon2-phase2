@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from backend.api.v1.api import api_router
 from backend.core.config import settings
+from backend.db.init_db import init_db_and_tables
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -19,6 +20,11 @@ if settings.BACKEND_CORS_ORIGINS:
         allow_methods=["*"],
         allow_headers=["*"],
     )
+
+# Initialize database tables on startup
+@app.on_event("startup")
+async def on_startup():
+    await init_db_and_tables()
 
 app.include_router(api_router, prefix=settings.API_V1_STR)
 

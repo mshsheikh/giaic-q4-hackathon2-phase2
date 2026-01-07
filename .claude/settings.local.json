@@ -18,7 +18,10 @@
       "Bash(PORT=8000 uvicorn main:app --host 0.0.0.0 --port $PORT)",
       "Bash(export:*)",
       "Bash(PYTHONPATH=. backend/venv/bin/python -c \"from backend.main import app; print\\(''Success: backend.main can be imported from repo root''\\)\")",
-      "Bash(npm install -g vercel)"
+      "Bash(npm install -g vercel)",
+      "Bash(find /mnt/e/giaic-q4-hackathon2-phase2 -name \"*.py\" -exec grep -l \"SQLModel\\\\|Table\\\\|Field\" {} ;)",
+      "Bash(cat /mnt/e/giaic-q4-hackathon2-phase2/backend/models/user.py)",
+      "Bash(find /mnt/e/giaic-q4-hackathon2-phase2/backend -name \"*.py\" -exec grep -l \"create_user\\\\|get_user\\\\|user.*database\\\\|insert.*user\" {} ;)"
     ]
   }
 }
