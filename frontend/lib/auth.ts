@@ -25,7 +25,16 @@ export async function register(email: string, password: string) {
   console.log('Register status:', res.status);
   console.log('Register response:', text);
 
-  if (!res.ok) throw new Error('Register failed');
+  if (!res.ok) {
+    // Try to parse the error response for more specific details
+    try {
+      const errorData = JSON.parse(text);
+      throw new Error(errorData.detail || `Registration failed: ${res.status} ${res.statusText}`);
+    } catch (e) {
+      // If parsing fails, throw a generic error with status
+      throw new Error(`Registration failed: ${res.status} ${res.statusText}`);
+    }
+  }
   return JSON.parse(text);
 }
 

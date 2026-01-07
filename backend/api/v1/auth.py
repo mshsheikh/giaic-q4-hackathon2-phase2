@@ -1,10 +1,10 @@
 from fastapi import APIRouter, HTTPException, status
 from pydantic import EmailStr
 import re
-from backend.services.user_service import UserService
-from backend.models.user import UserCreate, UserLogin, UserPublic
-from backend.utils.auth import create_access_token, verify_password
-from backend.utils.errors import AuthenticationException
+from services.user_service import UserService
+from models.user import UserCreate, UserLogin, UserPublic
+from utils.auth import create_access_token, verify_password
+from utils.errors import AuthenticationException
 from datetime import timedelta
 
 router = APIRouter(

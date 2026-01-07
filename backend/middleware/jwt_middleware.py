@@ -1,7 +1,7 @@
 from typing import Optional
 from fastapi import Request, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from backend.utils.auth import verify_token
+from utils.auth import verify_token
 
 
 class JWTBearer(HTTPBearer):

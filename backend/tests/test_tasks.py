@@ -1,11 +1,11 @@
 import pytest
 from httpx import AsyncClient
-from backend.main import app
-from backend.models.task import TaskStatus
-from backend.services.task_service import TaskService
-from backend.db.session import AsyncSessionLocal
+from main import app
+from models.task import TaskStatus
+from services.task_service import TaskService
+from db.session import AsyncSessionLocal
 from sqlmodel import select
-from backend.models.task import Task
+from models.task import Task
 import uuid
 
 

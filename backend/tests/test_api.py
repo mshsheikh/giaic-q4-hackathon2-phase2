@@ -1,7 +1,7 @@
 import pytest
 from httpx import AsyncClient
-from backend.main import app
-from backend.utils.auth import create_access_token
+from main import app
+from utils.auth import create_access_token
 from datetime import timedelta
 import uuid
 

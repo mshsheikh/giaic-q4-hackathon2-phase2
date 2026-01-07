@@ -1,9 +1,46 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from backend.api.v1.api import api_router
-from backend.core.config import settings
-from backend.db.init_db import init_db_and_tables
+# Fail-fast startup assertion for import validation
+try:
+    # Test if modules can be imported without backend. prefix
+    import api.v1.api
+    import core.config
+    import db.init_db
+except ImportError as e:
+    raise RuntimeError(
+        f"""
+        Import Error: {e}
+
+        Railway Deployment Configuration:
+        - Ensure rootDir is set to '/backend' in Railway settings
+        - For local development: uvicorn backend.main:app
+        - For Railway deployment: uvicorn main:app (with rootDir=/backend)
+
+        The backend. prefix imports are misconfigured.
+        All imports should be relative to the backend directory.
+        """
+    )
+
+# Validate that imports work before accessing settings
+try:
+    from api.v1.api import api_router
+    from core.config import settings
+    from db.init_db import init_db_and_tables
+except Exception as e:
+    raise RuntimeError(
+        f"""
+        Runtime Import Error: {e}
+
+        Railway Deployment Configuration:
+        - Ensure rootDir is set to '/backend' in Railway settings
+        - For local development: uvicorn backend.main:app
+        - For Railway deployment: uvicorn main:app (with rootDir=/backend)
+
+        Missing environment variables or import misconfiguration detected.
+        Make sure all required environment variables are set.
+        """
+    )
 
 app = FastAPI(
     title=settings.PROJECT_NAME,

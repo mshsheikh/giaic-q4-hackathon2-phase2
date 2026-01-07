@@ -1,11 +1,11 @@
 from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, status, Query, Request
 from sqlmodel import Session
-from backend.db.session import get_async_session
-from backend.models.task import Task, TaskCreate, TaskUpdate, TaskPublic, TaskUpdateStatus, TaskStatus
-from backend.services.task_service import TaskService
-from backend.middleware.jwt_middleware import JWTBearer
-from backend.utils.errors import ValidationError, UnauthorizedTaskAccessException, TaskNotFoundException
+from db.session import get_async_session
+from models.task import Task, TaskCreate, TaskUpdate, TaskPublic, TaskUpdateStatus, TaskStatus
+from services.task_service import TaskService
+from middleware.jwt_middleware import JWTBearer
+from utils.errors import ValidationError, UnauthorizedTaskAccessException, TaskNotFoundException
 
 router = APIRouter(
     prefix="/tasks",

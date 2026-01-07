@@ -21,7 +21,8 @@
       "Bash(npm install -g vercel)",
       "Bash(find /mnt/e/giaic-q4-hackathon2-phase2 -name \"*.py\" -exec grep -l \"SQLModel\\\\|Table\\\\|Field\" {} ;)",
       "Bash(cat /mnt/e/giaic-q4-hackathon2-phase2/backend/models/user.py)",
-      "Bash(find /mnt/e/giaic-q4-hackathon2-phase2/backend -name \"*.py\" -exec grep -l \"create_user\\\\|get_user\\\\|user.*database\\\\|insert.*user\" {} ;)"
+      "Bash(find /mnt/e/giaic-q4-hackathon2-phase2/backend -name \"*.py\" -exec grep -l \"create_user\\\\|get_user\\\\|user.*database\\\\|insert.*user\" {} ;)",
+      "Bash(cat /mnt/e/giaic-q4-hackathon2-phase2/backend/.env)"
     ]
   }
 }

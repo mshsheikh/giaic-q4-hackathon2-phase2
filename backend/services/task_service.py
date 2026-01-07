@@ -1,10 +1,10 @@
 from typing import List, Optional
 from sqlmodel import select, and_
 from sqlalchemy.exc import IntegrityError
-from backend.db.session import AsyncSessionLocal
-from backend.models.task import Task, TaskCreate, TaskUpdate, TaskPublic, TaskUpdateStatus, TaskStatus
-from backend.core.config import settings
-from backend.utils.errors import UnauthorizedTaskAccessException, TaskNotFoundException
+from db.session import AsyncSessionLocal
+from models.task import Task, TaskCreate, TaskUpdate, TaskPublic, TaskUpdateStatus, TaskStatus
+from core.config import settings
+from utils.errors import UnauthorizedTaskAccessException, TaskNotFoundException
 
 
 class TaskService:

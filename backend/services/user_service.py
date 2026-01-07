@@ -1,10 +1,10 @@
 from typing import Optional
 from sqlmodel import select
 from sqlalchemy.exc import IntegrityError
-from backend.db.session import AsyncSessionLocal
-from backend.models.user import User, UserCreate
-from backend.utils.auth import get_password_hash
-from backend.utils.errors import AuthenticationException
+from db.session import AsyncSessionLocal
+from models.user import User, UserCreate
+from utils.auth import get_password_hash
+from utils.errors import AuthenticationException
 
 
 class UserService:
