@@ -67,22 +67,49 @@ async def create_task(
     """
     Create a new task for the authenticated user.
     """
-    # Get user_id from request state (set by JWT middleware)
-    user_id = getattr(request.state, "user_id", None)
-    if not user_id:
+    try:
+        # Log the request for debugging
+        print(f"DEBUG: Received create_task request - Title: {task_create.title}, User ID: {getattr(request.state, 'user_id', 'None')}")
+
+        # Get user_id from request state (set by JWT middleware)
+        user_id = getattr(request.state, "user_id", None)
+        if not user_id:
+            print(f"DEBUG: No user_id found in request state - authentication failed")
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Authentication required. Please log in and try again."
+            )
+
+        # Validate input data
+        if len(task_create.title) < 1 or len(task_create.title) > 100:
+            print(f"DEBUG: Invalid title length - received: {len(task_create.title) if task_create.title else 0}")
+            raise ValidationError("Title must be between 1 and 100 characters")
+
+        if task_create.description and len(task_create.description) > 1000:
+            print(f"DEBUG: Invalid description length - received: {len(task_create.description) if task_create.description else 0}")
+            raise ValidationError("Description must be less than 1000 characters")
+
+        # Attempt to create the task
+        result = await TaskService.create_task(task_create, user_id)
+        print(f"DEBUG: Task created successfully - ID: {result.id}")
+        return result
+
+    except ValidationError as ve:
+        print(f"DEBUG: Validation error in create_task: {str(ve)}")
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="User ID not found in request"
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(ve)
         )
-
-    # Validate input data
-    if len(task_create.title) < 1 or len(task_create.title) > 100:
-        raise ValidationError("Title must be between 1 and 100 characters")
-
-    if task_create.description and len(task_create.description) > 1000:
-        raise ValidationError("Description must be less than 1000 characters")
-
-    return await TaskService.create_task(task_create, user_id)
+    except HTTPException:
+        # Re-raise HTTP exceptions as-is
+        print(f"DEBUG: HTTP exception in create_task: {getattr(request.state, 'user_id', 'None')}")
+        raise
+    except Exception as e:
+        print(f"DEBUG: Unexpected error in create_task: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to create task: {str(e)}"
+        )
 
 
 @router.get("/{task_id}", response_model=TaskPublic)

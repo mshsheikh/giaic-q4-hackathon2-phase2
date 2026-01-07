@@ -51,17 +51,32 @@ class TaskService:
     @staticmethod
     async def create_task(task_create: TaskCreate, user_id: str) -> TaskPublic:
         async with AsyncSessionLocal() as session:
-            # Create task with user_id for ownership
-            task = Task(
-                **task_create.dict(),
-                user_id=user_id
-            )
+            try:
+                # Log the task creation attempt
+                print(f"DEBUG: Attempting to create task for user_id: {user_id}")
 
-            session.add(task)
-            await session.commit()
-            await session.refresh(task)
+                # Create task with user_id for ownership
+                task = Task(
+                    **task_create.dict(),
+                    user_id=user_id
+                )
 
-            return TaskPublic.model_validate(task)
+                session.add(task)
+                await session.commit()
+                await session.refresh(task)
+
+                print(f"DEBUG: Successfully created task with ID: {task.id}")
+                return TaskPublic.model_validate(task)
+
+            except IntegrityError as e:
+                print(f"DEBUG: Database integrity error creating task: {str(e)}")
+                await session.rollback()
+                raise ValueError(f"Database constraint violation: {str(e)}")
+
+            except Exception as e:
+                print(f"DEBUG: Error in TaskService.create_task: {str(e)}")
+                await session.rollback()
+                raise
 
     @staticmethod
     async def update_task(task_id: str, task_update: TaskUpdate, user_id: str) -> Optional[TaskPublic]:

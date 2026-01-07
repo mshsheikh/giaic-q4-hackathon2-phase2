@@ -10,21 +10,55 @@ async function request(
       ? localStorage.getItem("access_token")
       : null;
 
+  // Validate JWT token exists
+  if (!token) {
+    throw new Error('No authentication token found. Please log in again.');
+  }
+
+  // Log request details
+  console.log('API Request:', {
+    url: `${API_BASE_URL}${path}`,
+    method: options.method || 'GET',
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ***`,
+      ...(options.headers || {}),
+    },
+    body: options.body || null
+  });
+
   const res = await fetch(`${API_BASE_URL}${path}`, {
     ...options,
     headers: {
       "Content-Type": "application/json",
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      Authorization: `Bearer ${token}`,
       ...(options.headers || {}),
     },
   });
 
+  // Log response details
+  const responseText = await res.text();
+  console.log('API Response:', {
+    status: res.status,
+    statusText: res.statusText,
+    url: res.url,
+    body: responseText
+  });
+
   if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`API ${res.status}: ${text}`);
+    // Check for specific error types
+    if (res.status === 401) {
+      // Clear invalid token
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("access_token");
+      }
+      throw new Error('Authentication failed. Please log in again.');
+    }
+
+    throw new Error(`API ${res.status}: ${responseText}`);
   }
 
-  return res.json();
+  return JSON.parse(responseText);
 }
 
 export const api = {

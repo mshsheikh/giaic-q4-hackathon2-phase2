@@ -51,7 +51,7 @@ const HomePage = () => {
       if (error instanceof Error && error.message.includes('401')) {
         router.push('/login');
       } else {
-        alert('Failed to load tasks');
+        alert(error instanceof Error ? error.message : 'Failed to load tasks');
       }
     } finally {
       setLoading(false);
@@ -59,9 +59,20 @@ const HomePage = () => {
   };
 
   const handleCreateTask = async (taskData: TaskCreate) => {
+    // Validate JWT token exists and is not expired before making API call
     if (!isAuthenticated()) {
       router.push('/login');
       return;
+    }
+
+    // Check if token exists in localStorage
+    if (typeof window !== "undefined") {
+      const token = localStorage.getItem("access_token");
+      if (!token) {
+        alert('No authentication token found. Please log in again.');
+        router.push('/login');
+        return;
+      }
     }
 
     // Optimistic update: add task immediately to UI
@@ -82,7 +93,7 @@ const HomePage = () => {
 
     try {
       const createdTask = await api.createTask(taskData);
-      // Replace the temporary task with the actual created task
+      // Replace the temporary task with the actual created task only if API succeeds
       setTasks(prev => prev.map(task => task.id === tempId ? createdTask : task));
     } catch (error) {
       // If the API call fails, remove the temporary task
@@ -91,7 +102,7 @@ const HomePage = () => {
       if (error instanceof Error && error.message.includes('401')) {
         router.push('/login');
       } else {
-        alert('Failed to create task');
+        alert(error instanceof Error ? error.message : 'Failed to create task');
       }
     }
   };
@@ -111,7 +122,7 @@ const HomePage = () => {
       if (error instanceof Error && error.message.includes('401')) {
         router.push('/login');
       } else {
-        alert('Failed to update task');
+        alert(error instanceof Error ? error.message : 'Failed to update task');
       }
     }
   };
@@ -145,7 +156,7 @@ const HomePage = () => {
       if (error instanceof Error && error.message.includes('401')) {
         router.push('/login');
       } else {
-        alert('Failed to update task status');
+        alert(error instanceof Error ? error.message : 'Failed to update task status');
       }
     }
   };
@@ -177,7 +188,7 @@ const HomePage = () => {
       if (error instanceof Error && error.message.includes('401')) {
         router.push('/login');
       } else {
-        alert('Failed to delete task');
+        alert(error instanceof Error ? error.message : 'Failed to delete task');
       }
     }
   };

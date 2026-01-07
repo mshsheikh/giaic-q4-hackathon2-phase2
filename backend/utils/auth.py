@@ -31,10 +31,14 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
 
 def verify_token(token: str) -> Optional[dict]:
     try:
+        print(f"DEBUG: Decoding JWT token...")
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
         user_id: str = payload.get("sub")
+        print(f"DEBUG: Extracted user_id from token: {user_id}")
         if user_id is None:
+            print(f"DEBUG: No user_id found in token payload")
             return None
         return payload
-    except JWTError:
+    except JWTError as e:
+        print(f"DEBUG: JWT decoding error: {str(e)}")
         return None
