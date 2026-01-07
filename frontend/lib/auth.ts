@@ -21,8 +21,12 @@ export async function register(email: string, password: string) {
     body: JSON.stringify({ email, password }),
   });
 
+  const text = await res.text();
+  console.log('Register status:', res.status);
+  console.log('Register response:', text);
+
   if (!res.ok) throw new Error('Register failed');
-  return res.json();
+  return JSON.parse(text);
 }
 
 export function logout() {

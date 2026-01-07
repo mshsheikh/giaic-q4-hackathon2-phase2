@@ -17,7 +17,12 @@ class Settings(BaseSettings):
     REFRESH_TOKEN_EXPIRE_DAYS: int = 7
 
     # CORS
-    BACKEND_CORS_ORIGINS: List[str] = ["http://localhost:3000", "http://127.0.0.1:3000"]
+    BACKEND_CORS_ORIGINS: List[str] = [
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "https://giaic-q4-hackathon2-frontend-git-main-mshsheikhs-projects.vercel.app",
+        "https://q4h2p2-mshsheikh.vercel.app"
+    ]
 
     # Better Auth
     BETTER_AUTH_SECRET: str
