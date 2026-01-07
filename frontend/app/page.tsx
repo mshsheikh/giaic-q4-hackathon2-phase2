@@ -220,19 +220,19 @@ const HomePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-950 to-gray-900">
       {/* Header */}
-      <header className="bg-gray-800/50 backdrop-blur-lg border-b border-cyan-500/30">
+      <header className="bg-gray-900/70 backdrop-blur-xl border-b border-cyan-500/40 shadow-lg shadow-cyan-500/10">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div>
-            <h1 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
-              Todo App
+            <h1 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">
+              <span className="inline-block animate-pulse-slow">✦</span> Todo App
             </h1>
-            <p className="text-gray-400 text-sm">Manage your tasks efficiently</p>
+            <p className="text-cyan-300/80 text-sm">Manage your tasks efficiently</p>
           </div>
           <button
             onClick={handleLogout}
-            className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md transition-colors duration-200"
+            className="px-4 py-2 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-red-500/20 focus:outline-none focus:ring-2 focus:ring-red-500/50"
           >
             Logout
           </button>
@@ -245,30 +245,30 @@ const HomePage = () => {
         <div className="flex space-x-2">
           <button
             onClick={() => setFilter('all')}
-            className={`px-4 py-2 rounded-md ${
+            className={`px-4 py-2 rounded-lg transition-all duration-300 transform hover:scale-105 ${
               filter === 'all'
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600'
+                ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-lg shadow-cyan-500/30'
+                : 'bg-gray-800/60 text-cyan-300 hover:bg-gray-700/80 border border-cyan-500/30'
             }`}
           >
             All
           </button>
           <button
             onClick={() => setFilter('pending')}
-            className={`px-4 py-2 rounded-md ${
+            className={`px-4 py-2 rounded-lg transition-all duration-300 transform hover:scale-105 ${
               filter === 'pending'
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600'
+                ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-lg shadow-cyan-500/30'
+                : 'bg-gray-800/60 text-cyan-300 hover:bg-gray-700/80 border border-cyan-500/30'
             }`}
           >
             Pending
           </button>
           <button
             onClick={() => setFilter('completed')}
-            className={`px-4 py-2 rounded-md ${
+            className={`px-4 py-2 rounded-lg transition-all duration-300 transform hover:scale-105 ${
               filter === 'completed'
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600'
+                ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-lg shadow-cyan-500/30'
+                : 'bg-gray-800/60 text-cyan-300 hover:bg-gray-700/80 border border-cyan-500/30'
             }`}
           >
             Completed
@@ -280,9 +280,14 @@ const HomePage = () => {
             setEditingTask(null);
             setShowForm(true);
           }}
-          className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          className="px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-cyan-500/30 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 border border-cyan-500/50"
         >
-          Add Task
+          <span className="flex items-center">
+            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+            </svg>
+            Add Task
+          </span>
         </button>
       </div>
 
@@ -306,16 +311,16 @@ const HomePage = () => {
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="mt-6 flex justify-center">
+        <div className="mt-8 flex justify-center">
           <div className="flex space-x-2">
             {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
               <button
                 key={page}
                 onClick={() => setCurrentPage(page)}
-                className={`px-3 py-1 rounded ${
+                className={`px-4 py-2 rounded-lg transition-all duration-300 transform hover:scale-105 ${
                   currentPage === page
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600'
+                    ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-lg shadow-cyan-500/30'
+                    : 'bg-gray-800/60 text-cyan-300 hover:bg-gray-700/80 border border-cyan-500/30'
                 }`}
               >
                 {page}
