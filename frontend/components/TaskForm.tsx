@@ -25,14 +25,19 @@ const TaskForm: React.FC<TaskFormProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Format due date to ISO string if provided
+    // Format due date to UTC ISO string if provided
     let formattedDueDate: string | undefined = undefined;
     if (dueDate) {
-      // Convert date string to ISO format (date input returns YYYY-MM-DD)
-      const dateObj = new Date(dueDate);
-      // Set to end of day in UTC to avoid timezone issues
-      dateObj.setUTCHours(23, 59, 59, 999);
-      formattedDueDate = dateObj.toISOString();
+      // Convert date string to UTC ISO string consistently
+      const localDate = new Date(dueDate);
+      // Use UTC date object to prevent local timezone offset
+      const utcDate = new Date(Date.UTC(
+        localDate.getFullYear(),
+        localDate.getMonth(),
+        localDate.getDate(),
+        23, 59, 59, 999
+      ));
+      formattedDueDate = utcDate.toISOString();
     }
 
     const taskData: TaskCreate | TaskUpdate = {

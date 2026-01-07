@@ -1,4 +1,5 @@
 from typing import List, Optional
+from datetime import datetime
 from sqlmodel import select, and_
 from sqlalchemy.exc import IntegrityError
 from db.session import AsyncSessionLocal
@@ -57,7 +58,13 @@ class TaskService:
 
                 # Create task with user_id for ownership
                 task_data = task_create.dict()
-                task_data['user_id'] = user_id  # Add user_id that wasn't in the original request
+                task_data['user_id'] = user_id  # Add user_id from JWT
+                # Convert due_date to naive UTC if provided
+                if task_data.get('due_date'):
+                    dt = task_data['due_date']
+                    if dt.tzinfo is not None:
+                        # Convert to UTC and remove tzinfo
+                        task_data['due_date'] = dt.astimezone(datetime.timezone.utc).replace(tzinfo=None)
 
                 task = Task(**task_data)
 
@@ -91,11 +98,18 @@ class TaskService:
 
             # Update only the fields that are provided
             update_data = task_update.dict(exclude_unset=True)
+            # Convert due_date to naive UTC if provided
+            if update_data.get('due_date'):
+                dt = update_data['due_date']
+                if dt.tzinfo is not None:
+                    # Convert to UTC and remove tzinfo
+                    update_data['due_date'] = dt.astimezone(datetime.timezone.utc).replace(tzinfo=None)
+
             for field, value in update_data.items():
                 setattr(task, field, value)
 
-            # Update the updated_at timestamp
-            task.updated_at = task.updated_at.__class__.now()
+            # Update the updated_at timestamp to naive UTC
+            task.updated_at = datetime.utcnow()
 
             session.add(task)
             await session.commit()
@@ -116,8 +130,8 @@ class TaskService:
 
             # Update the status
             task.status = task_update_status.status
-            # Update the updated_at timestamp
-            task.updated_at = task.updated_at.__class__.now()
+            # Update the updated_at timestamp to naive UTC
+            task.updated_at = datetime.utcnow()
 
             session.add(task)
             await session.commit()
