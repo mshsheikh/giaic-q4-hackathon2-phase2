@@ -220,19 +220,19 @@ const HomePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-950 to-gray-900">
+    <div className="min-h-screen bg-gray-900">
       {/* Header */}
-      <header className="bg-gray-900/70 backdrop-blur-xl border-b border-cyan-500/40 shadow-lg shadow-cyan-500/10">
+      <header className="bg-gray-800/50 backdrop-blur-lg border-b border-cyan-500/30">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div>
-            <h1 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">
-              <span className="inline-block animate-pulse-slow">✦</span> Todo App
+            <h1 className="text-2xl font-bold text-cyan-400">
+              Todo App
             </h1>
-            <p className="text-cyan-300/80 text-sm">Manage your tasks efficiently</p>
+            <p className="text-gray-400 text-sm">Manage your tasks efficiently</p>
           </div>
           <button
             onClick={handleLogout}
-            className="px-4 py-2 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-red-500/20 focus:outline-none focus:ring-2 focus:ring-red-500/50"
+            className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg border border-cyan-500/50 hover:border-cyan-400/50 transition-all duration-200 hover:shadow-sm hover:shadow-cyan-500/20 focus:outline-none focus:ring-2 focus:ring-cyan-500/50"
           >
             Logout
           </button>
@@ -245,31 +245,31 @@ const HomePage = () => {
         <div className="flex space-x-2">
           <button
             onClick={() => setFilter('all')}
-            className={`px-4 py-2 rounded-lg transition-all duration-300 transform hover:scale-105 ${
+            className={`px-4 py-2 rounded-md ${
               filter === 'all'
-                ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-lg shadow-cyan-500/30'
-                : 'bg-gray-800/60 text-cyan-300 hover:bg-gray-700/80 border border-cyan-500/30'
-            }`}
+                ? 'bg-cyan-600 text-white border border-cyan-500'
+                : 'bg-gray-700 text-gray-300 hover:bg-gray-600 border border-cyan-500/30 hover:border-cyan-400/50'
+            } transition-all duration-200 hover:shadow-sm hover:shadow-cyan-500/20`}
           >
             All
           </button>
           <button
             onClick={() => setFilter('pending')}
-            className={`px-4 py-2 rounded-lg transition-all duration-300 transform hover:scale-105 ${
+            className={`px-4 py-2 rounded-md ${
               filter === 'pending'
-                ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-lg shadow-cyan-500/30'
-                : 'bg-gray-800/60 text-cyan-300 hover:bg-gray-700/80 border border-cyan-500/30'
-            }`}
+                ? 'bg-cyan-600 text-white border border-cyan-500'
+                : 'bg-gray-700 text-gray-300 hover:bg-gray-600 border border-cyan-500/30 hover:border-cyan-400/50'
+            } transition-all duration-200 hover:shadow-sm hover:shadow-cyan-500/20`}
           >
             Pending
           </button>
           <button
             onClick={() => setFilter('completed')}
-            className={`px-4 py-2 rounded-lg transition-all duration-300 transform hover:scale-105 ${
+            className={`px-4 py-2 rounded-md ${
               filter === 'completed'
-                ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-lg shadow-cyan-500/30'
-                : 'bg-gray-800/60 text-cyan-300 hover:bg-gray-700/80 border border-cyan-500/30'
-            }`}
+                ? 'bg-cyan-600 text-white border border-cyan-500'
+                : 'bg-gray-700 text-gray-300 hover:bg-gray-600 border border-cyan-500/30 hover:border-cyan-400/50'
+            } transition-all duration-200 hover:shadow-sm hover:shadow-cyan-500/20`}
           >
             Completed
           </button>
@@ -280,14 +280,9 @@ const HomePage = () => {
             setEditingTask(null);
             setShowForm(true);
           }}
-          className="px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-cyan-500/30 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 border border-cyan-500/50"
+          className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-md border border-cyan-500/50 hover:border-cyan-400/50 transition-all duration-200 hover:shadow-sm hover:shadow-cyan-500/20 focus:outline-none focus:ring-2 focus:ring-cyan-500/50"
         >
-          <span className="flex items-center">
-            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-            </svg>
-            Add Task
-          </span>
+          Add Task
         </button>
       </div>
 
@@ -311,17 +306,17 @@ const HomePage = () => {
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="mt-8 flex justify-center">
+        <div className="mt-6 flex justify-center">
           <div className="flex space-x-2">
             {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
               <button
                 key={page}
                 onClick={() => setCurrentPage(page)}
-                className={`px-4 py-2 rounded-lg transition-all duration-300 transform hover:scale-105 ${
+                className={`px-3 py-1 rounded ${
                   currentPage === page
-                    ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-lg shadow-cyan-500/30'
-                    : 'bg-gray-800/60 text-cyan-300 hover:bg-gray-700/80 border border-cyan-500/30'
-                }`}
+                    ? 'bg-cyan-600 text-white border border-cyan-500'
+                    : 'bg-gray-700 text-gray-300 hover:bg-gray-600 border border-cyan-500/30 hover:border-cyan-400/50'
+                } transition-all duration-200 hover:shadow-sm hover:shadow-cyan-500/20`}
               >
                 {page}
               </button>
