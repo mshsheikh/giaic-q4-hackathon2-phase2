@@ -217,6 +217,10 @@ The application includes comprehensive tests:
 - **Integration Tests**: For API endpoints and database operations
 - **End-to-End Tests**: For full user workflows (to be implemented)
 
+## Documentation Organization
+
+All project documentation, debug logs, fix summaries, test logs, and temporary documents are stored in the `/history/phr` directory following our documentation organization rule.
+
 ## Deployment
 
 The application is designed for cloud deployment with:

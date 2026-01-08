@@ -70,11 +70,6 @@ const TaskCard: React.FC<TaskCardProps> = ({
               {task.description}
             </p>
           )}
-          {task.due_date && (
-            <p className="mt-2 text-xs text-cyan-400">
-              Due: {new Date(task.due_date).toLocaleDateString()}
-            </p>
-          )}
           <p className="mt-2 text-xs text-gray-500">
             Created: {new Date(task.created_at).toLocaleString()}
           </p>

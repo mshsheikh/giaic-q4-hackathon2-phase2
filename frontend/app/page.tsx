@@ -84,8 +84,7 @@ const HomePage = () => {
       status: 'pending',
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
-      user_id: '',
-      due_date: taskData.due_date
+      user_id: ''
     };
 
     setTasks(prev => [newTask, ...prev]);

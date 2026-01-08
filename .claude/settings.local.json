@@ -22,7 +22,20 @@
       "Bash(find /mnt/e/giaic-q4-hackathon2-phase2 -name \"*.py\" -exec grep -l \"SQLModel\\\\|Table\\\\|Field\" {} ;)",
       "Bash(cat /mnt/e/giaic-q4-hackathon2-phase2/backend/models/user.py)",
       "Bash(find /mnt/e/giaic-q4-hackathon2-phase2/backend -name \"*.py\" -exec grep -l \"create_user\\\\|get_user\\\\|user.*database\\\\|insert.*user\" {} ;)",
-      "Bash(cat /mnt/e/giaic-q4-hackathon2-phase2/backend/.env)"
+      "Bash(cat /mnt/e/giaic-q4-hackathon2-phase2/backend/.env)",
+      "Bash(while read file)",
+      "Bash(do grep -l \"due_date\\\\|dueDate\" \"$file\")",
+      "Bash(done)",
+      "Bash(python -c \"\nimport sys\nsys.path.append\\(''.''\\)\n\n# Test that all imports work without due_date\ntry:\n    from models.task import Task, TaskCreate, TaskUpdate\n    print\\(''✅ Task models imported successfully without due_date''\\)\n    \n    # Verify TaskCreate doesn''t have due_date\n    task_create = TaskCreate\\(title=''Test'', description=''Test desc''\\)\n    assert not hasattr\\(task_create, ''due_date''\\), ''TaskCreate should not have due_date''\n    print\\(''✅ TaskCreate has no due_date field''\\)\n    \n    # Verify TaskUpdate doesn''t have due_date\n    task_update = TaskUpdate\\(title=''Test''\\)\n    assert not hasattr\\(task_update, ''due_date''\\), ''TaskUpdate should not have due_date''\n    print\\(''✅ TaskUpdate has no due_date field''\\)\n    \n    # Test that TaskService still works\n    from services.task_service import TaskService\n    print\\(''✅ TaskService imported successfully''\\)\n    \n    # Test that API endpoints still work\n    from api.v1.tasks import router\n    print\\(''✅ API router imported successfully''\\)\n    \n    print\\(''\\\\n🎉 All functionality verified - due_date completely removed!''\\)\n    \nexcept Exception as e:\n    print\\(f''❌ Error: {e}''\\)\n    import traceback\n    traceback.print_exc\\(\\)\n\")",
+      "Bash(PYTHONPATH=. python -c \"\n# Test that models work without due_date\nfrom models.task import Task, TaskCreate, TaskUpdate\n\n# Create a task without due_date\ntask_create = TaskCreate\\(title=''Test Task'', description=''Test description''\\)\nprint\\(''✅ TaskCreate created without due_date:'', hasattr\\(task_create, ''due_date''\\)\\)\n\n# Create a task update without due_date\ntask_update = TaskUpdate\\(title=''Updated Task''\\)\nprint\\(''✅ TaskUpdate created without due_date:'', hasattr\\(task_update, ''due_date''\\)\\)\n\nprint\\(''✅ All models successfully updated to remove due_date!''\\)\n\")",
+      "Bash(__NEW_LINE__ mv /mnt/e/giaic-q4-hackathon2-phase2/final_task_creation_fix_summary.md /mnt/e/giaic-q4-hackathon2-phase2/history/phr/)",
+      "Bash(__NEW_LINE__ mv /mnt/e/giaic-q4-hackathon2-phase2/frontend_theme_enhancement_summary.md /mnt/e/giaic-q4-hackathon2-phase2/history/phr/)",
+      "Bash(__NEW_LINE__ mv /mnt/e/giaic-q4-hackathon2-phase2/optimistic_update_fix_verification.md /mnt/e/giaic-q4-hackathon2-phase2/history/phr/)",
+      "Bash(__NEW_LINE__ mv /mnt/e/giaic-q4-hackathon2-phase2/removed_due_date_functionality.md /mnt/e/giaic-q4-hackathon2-phase2/history/phr/)",
+      "Bash(__NEW_LINE__ mv /mnt/e/giaic-q4-hackathon2-phase2/task_creation_fix_summary.md /mnt/e/giaic-q4-hackathon2-phase2/history/phr/)",
+      "Bash(__NEW_LINE__ mv /mnt/e/giaic-q4-hackathon2-phase2/task_creation_test.md /mnt/e/giaic-q4-hackathon2-phase2/history/phr/)",
+      "Bash(__NEW_LINE__ mv /mnt/e/giaic-q4-hackathon2-phase2/utc_date_formatting_fix.md /mnt/e/giaic-q4-hackathon2-phase2/history/phr/)",
+      "Bash(__NEW_LINE__ mv /mnt/e/giaic-q4-hackathon2-phase2/run.sh /mnt/e/giaic-q4-hackathon2-phase2/history/phr/)"
     ]
   }
 }

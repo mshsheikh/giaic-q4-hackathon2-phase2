@@ -14,7 +14,6 @@ class TaskBase(SQLModel):
     title: str = Field(min_length=1, max_length=100)
     description: Optional[str] = Field(default=None, max_length=1000)
     status: TaskStatus = Field(default=TaskStatus.PENDING)
-    due_date: Optional[datetime] = Field(default=None)
     user_id: str = Field(index=True)  # Reference to Better Auth user ID
 
 
@@ -28,14 +27,12 @@ class TaskCreate(SQLModel):
     title: str = Field(min_length=1, max_length=100)
     description: Optional[str] = Field(default=None, max_length=1000)
     status: TaskStatus = Field(default=TaskStatus.PENDING)
-    due_date: Optional[datetime] = Field(default=None)
 
 
 class TaskUpdate(SQLModel):
     title: Optional[str] = Field(default=None, min_length=1, max_length=100)
     description: Optional[str] = Field(default=None, max_length=1000)
     status: Optional[TaskStatus] = None
-    due_date: Optional[datetime] = None
 
 
 class TaskPublic(TaskBase):

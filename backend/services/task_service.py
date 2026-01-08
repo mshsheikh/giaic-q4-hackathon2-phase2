@@ -24,8 +24,6 @@ class TaskService:
             # Add sorting
             if sort_by == "title":
                 query = query.order_by(Task.title if order == "asc" else Task.title.desc())
-            elif sort_by == "due_date":
-                query = query.order_by(Task.due_date if order == "asc" else Task.due_date.desc())
             else:  # default to created_at
                 query = query.order_by(Task.created_at if order == "asc" else Task.created_at.desc())
 
@@ -59,12 +57,6 @@ class TaskService:
                 # Create task with user_id for ownership
                 task_data = task_create.dict()
                 task_data['user_id'] = user_id  # Add user_id from JWT
-                # Convert due_date to naive UTC if provided
-                if task_data.get('due_date'):
-                    dt = task_data['due_date']
-                    if dt.tzinfo is not None:
-                        # Convert to UTC and remove tzinfo
-                        task_data['due_date'] = dt.astimezone(timezone.utc).replace(tzinfo=None)
 
                 task = Task(**task_data)
 
@@ -98,12 +90,6 @@ class TaskService:
 
             # Update only the fields that are provided
             update_data = task_update.dict(exclude_unset=True)
-            # Convert due_date to naive UTC if provided
-            if update_data.get('due_date'):
-                dt = update_data['due_date']
-                if dt.tzinfo is not None:
-                    # Convert to UTC and remove tzinfo
-                    update_data['due_date'] = dt.astimezone(timezone.utc).replace(tzinfo=None)
 
             for field, value in update_data.items():
                 setattr(task, field, value)

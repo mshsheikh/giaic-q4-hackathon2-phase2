@@ -3,7 +3,6 @@ export interface Task {
   title: string;
   description?: string;
   status: 'pending' | 'completed';
-  due_date?: string; // ISO string
   created_at: string; // ISO string
   updated_at: string; // ISO string
   user_id: string;
@@ -12,14 +11,12 @@ export interface Task {
 export interface TaskCreate {
   title: string;
   description?: string;
-  due_date?: string; // ISO string
 }
 
 export interface TaskUpdate {
   title?: string;
   description?: string;
   status?: 'pending' | 'completed';
-  due_date?: string; // ISO string
 }
 
 export interface TaskUpdateStatus {

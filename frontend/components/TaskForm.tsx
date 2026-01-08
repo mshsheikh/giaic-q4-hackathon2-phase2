@@ -20,30 +20,13 @@ const TaskForm: React.FC<TaskFormProps> = ({
 }) => {
   const [title, setTitle] = useState(initialData?.title || '');
   const [description, setDescription] = useState(initialData?.description || '');
-  const [dueDate, setDueDate] = useState(initialData?.due_date || '');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Format due date to UTC ISO string if provided
-    let formattedDueDate: string | undefined = undefined;
-    if (dueDate) {
-      // Convert date string to UTC ISO string consistently
-      const localDate = new Date(dueDate);
-      // Use UTC date object to prevent local timezone offset
-      const utcDate = new Date(Date.UTC(
-        localDate.getFullYear(),
-        localDate.getMonth(),
-        localDate.getDate(),
-        23, 59, 59, 999
-      ));
-      formattedDueDate = utcDate.toISOString();
-    }
-
     const taskData: TaskCreate | TaskUpdate = {
       title: title.trim(),
       description: description.trim() || undefined,
-      due_date: formattedDueDate || undefined,
     };
 
     // Add validation
@@ -98,18 +81,6 @@ const TaskForm: React.FC<TaskFormProps> = ({
         />
       </div>
 
-      <div className="mb-6">
-        <label htmlFor="dueDate" className="block text-sm font-medium text-cyan-300 mb-2">
-          Due Date
-        </label>
-        <input
-          type="date"
-          id="dueDate"
-          value={dueDate}
-          onChange={(e) => setDueDate(e.target.value)}
-          className="w-full px-4 py-3 bg-gray-700/50 border border-cyan-500/30 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-400 focus:shadow-sm focus:shadow-cyan-500/20 transition-all duration-200"
-        />
-      </div>
 
       <div className="flex justify-end space-x-3">
         <button
