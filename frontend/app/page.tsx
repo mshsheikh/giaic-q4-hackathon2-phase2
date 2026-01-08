@@ -7,6 +7,8 @@ import { isAuthenticated } from '../lib/auth';
 import { useRouter } from 'next/navigation';
 import TaskList from '../components/TaskList';
 import TaskForm from '../components/TaskForm';
+import { useTheme } from '../components/ThemeProvider';
+import { useToast } from '../components/ToastProvider';
 
 const HomePage = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -17,6 +19,8 @@ const HomePage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const router = useRouter();
+  const { theme, toggleTheme } = useTheme();
+  const { showToast } = useToast();
 
   // Check authentication on component mount
   useEffect(() => {
@@ -51,7 +55,7 @@ const HomePage = () => {
       if (error instanceof Error && error.message.includes('401')) {
         router.push('/login');
       } else {
-        alert(error instanceof Error ? error.message : 'Failed to load tasks');
+        showToast(error instanceof Error ? error.message : 'Failed to load tasks', 'error');
       }
     } finally {
       setLoading(false);
@@ -69,7 +73,7 @@ const HomePage = () => {
     if (typeof window !== "undefined") {
       const token = localStorage.getItem("access_token");
       if (!token) {
-        alert('No authentication token found. Please log in again.');
+        showToast('No authentication token found. Please log in again.', 'error');
         router.push('/login');
         return;
       }
@@ -101,7 +105,7 @@ const HomePage = () => {
       if (error instanceof Error && error.message.includes('401')) {
         router.push('/login');
       } else {
-        alert(error instanceof Error ? error.message : 'Failed to create task');
+        showToast(error instanceof Error ? error.message : 'Failed to create task', 'error');
       }
     }
   };
@@ -121,7 +125,7 @@ const HomePage = () => {
       if (error instanceof Error && error.message.includes('401')) {
         router.push('/login');
       } else {
-        alert(error instanceof Error ? error.message : 'Failed to update task');
+        showToast(error instanceof Error ? error.message : 'Failed to update task', 'error');
       }
     }
   };
@@ -155,7 +159,7 @@ const HomePage = () => {
       if (error instanceof Error && error.message.includes('401')) {
         router.push('/login');
       } else {
-        alert(error instanceof Error ? error.message : 'Failed to update task status');
+        showToast(error instanceof Error ? error.message : 'Failed to update task status', 'error');
       }
     }
   };
@@ -187,7 +191,7 @@ const HomePage = () => {
       if (error instanceof Error && error.message.includes('401')) {
         router.push('/login');
       } else {
-        alert(error instanceof Error ? error.message : 'Failed to delete task');
+        showToast(error instanceof Error ? error.message : 'Failed to delete task', 'error');
       }
     }
   };
@@ -219,22 +223,30 @@ const HomePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="bg-gray-800/50 backdrop-blur-lg border-b border-cyan-500/30">
+      <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div>
-            <h1 className="text-2xl font-bold text-cyan-400">
+            <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
               Todo App
             </h1>
-            <p className="text-gray-400 text-sm">Manage your tasks efficiently</p>
+            <p className="text-gray-600 dark:text-gray-400 text-sm">Manage your tasks efficiently</p>
           </div>
-          <button
-            onClick={handleLogout}
-            className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg border border-cyan-500/50 hover:border-cyan-400/50 transition-all duration-200 hover:shadow-sm hover:shadow-cyan-500/20 focus:outline-none focus:ring-2 focus:ring-cyan-500/50"
-          >
-            Logout
-          </button>
+          <div className="flex items-center space-x-3">
+            <button
+              onClick={toggleTheme}
+              className="px-3 py-1.5 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-md border border-gray-300 dark:border-gray-600 transition-all duration-200 text-sm"
+            >
+              {theme === 'dark' ? 'Light' : 'Dark'}
+            </button>
+            <button
+              onClick={handleLogout}
+              className="px-4 py-2 bg-white dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-800 dark:text-white rounded-md border border-gray-300 dark:border-gray-600 transition-all duration-200"
+            >
+              Logout
+            </button>
+          </div>
         </div>
       </header>
 
@@ -246,9 +258,9 @@ const HomePage = () => {
             onClick={() => setFilter('all')}
             className={`px-4 py-2 rounded-md ${
               filter === 'all'
-                ? 'bg-cyan-600 text-white border border-cyan-500'
-                : 'bg-gray-700 text-gray-300 hover:bg-gray-600 border border-cyan-500/30 hover:border-cyan-400/50'
-            } transition-all duration-200 hover:shadow-sm hover:shadow-cyan-500/20`}
+                ? 'bg-blue-600 text-white border border-blue-600'
+                : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 border border-gray-300 dark:border-gray-600'
+            } transition-all duration-200`}
           >
             All
           </button>
@@ -256,9 +268,9 @@ const HomePage = () => {
             onClick={() => setFilter('pending')}
             className={`px-4 py-2 rounded-md ${
               filter === 'pending'
-                ? 'bg-cyan-600 text-white border border-cyan-500'
-                : 'bg-gray-700 text-gray-300 hover:bg-gray-600 border border-cyan-500/30 hover:border-cyan-400/50'
-            } transition-all duration-200 hover:shadow-sm hover:shadow-cyan-500/20`}
+                ? 'bg-blue-600 text-white border border-blue-600'
+                : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 border border-gray-300 dark:border-gray-600'
+            } transition-all duration-200`}
           >
             Pending
           </button>
@@ -266,9 +278,9 @@ const HomePage = () => {
             onClick={() => setFilter('completed')}
             className={`px-4 py-2 rounded-md ${
               filter === 'completed'
-                ? 'bg-cyan-600 text-white border border-cyan-500'
-                : 'bg-gray-700 text-gray-300 hover:bg-gray-600 border border-cyan-500/30 hover:border-cyan-400/50'
-            } transition-all duration-200 hover:shadow-sm hover:shadow-cyan-500/20`}
+                ? 'bg-blue-600 text-white border border-blue-600'
+                : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 border border-gray-300 dark:border-gray-600'
+            } transition-all duration-200`}
           >
             Completed
           </button>
@@ -279,7 +291,7 @@ const HomePage = () => {
             setEditingTask(null);
             setShowForm(true);
           }}
-          className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-md border border-cyan-500/50 hover:border-cyan-400/50 transition-all duration-200 hover:shadow-sm hover:shadow-cyan-500/20 focus:outline-none focus:ring-2 focus:ring-cyan-500/50"
+          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md border border-transparent transition-all duration-200"
         >
           Add Task
         </button>
@@ -313,9 +325,9 @@ const HomePage = () => {
                 onClick={() => setCurrentPage(page)}
                 className={`px-3 py-1 rounded ${
                   currentPage === page
-                    ? 'bg-cyan-600 text-white border border-cyan-500'
-                    : 'bg-gray-700 text-gray-300 hover:bg-gray-600 border border-cyan-500/30 hover:border-cyan-400/50'
-                } transition-all duration-200 hover:shadow-sm hover:shadow-cyan-500/20`}
+                    ? 'bg-blue-600 text-white border border-blue-600'
+                    : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 border border-gray-300 dark:border-gray-600'
+                } transition-all duration-200`}
               >
                 {page}
               </button>

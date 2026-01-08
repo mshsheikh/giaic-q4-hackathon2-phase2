@@ -3,10 +3,10 @@ import SkeletonLoader from './SkeletonLoader';
 
 const TaskSkeleton: React.FC = () => {
   return (
-    <div className="bg-gray-700/30 border border-gray-600 rounded-lg p-4 mb-3 animate-pulse">
+    <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 mb-3 animate-pulse">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-3">
-          <SkeletonLoader className="w-5 h-5 rounded" />
+          <SkeletonLoader className="w-5 h-5 rounded-sm" />
           <SkeletonLoader className="w-32 h-4 rounded" />
         </div>
         <div className="flex space-x-2">
